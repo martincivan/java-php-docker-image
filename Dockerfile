@@ -1,3 +1,3 @@
-FROM openjdk:11-jre
+FROM openjdk:15-jdk-slim
 RUN apt update
-RUN apt install -y php php-bcmath php-xml php-curl php-intl php-mbstring php-dom git gradle
+RUN apt install -y php php-bcmath php-xml php-curl php-intl php-mbstring php-dom git
