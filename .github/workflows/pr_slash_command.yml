@@ -31,4 +31,3 @@ jobs:
           commands: deploy
           issue-type: pull-request
           issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
-          branch: ${{ steps.upstreambranch.outputs.branchname }}

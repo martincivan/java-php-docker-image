@@ -6,9 +6,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    outputs:
-        version: ${{ steps.set_version.outputs.version }}
-        deployment_id: ${{ steps.create_deployment.outputs.deployment_id }}
     steps:
       - name: Dump GitHub context
         env:
@@ -17,7 +14,7 @@ jobs:
       - name: Get the target branch name
         id: vars
         run: |
-          branch=${{ github.event.client_payload.slash_command.branch }}
+          branch=$(curl -v -H "Accept: application/vnd.github.sailor-v-preview+json" -u ${{ secrets.REPO_ACCESS_TOKEN }} ${{ github.event.issue.pull_request.url }} | jq '.head.ref' | sed 's/\"//g')"
           if [[ -z "$branch" ]]; then branch=${GITHUB_REF}; fi
           echo ::set-output name=branch::$branch
       - name: echo upstream branch
