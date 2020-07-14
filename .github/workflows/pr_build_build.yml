@@ -11,6 +11,21 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+      - env:
+          GITHUB_CONTEXT: ${{ toJson(github.event) }}
+        run: echo "$GITHUB_CONTEXT"
+      - env:
+          GITHUB_CONTEXT: ${{ toJson(github.event.client_payload) }}
+        run: echo "$GITHUB_CONTEXT"
+      - env:
+          GITHUB_CONTEXT: ${{ toJson(github.event.client_payload.github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - env:
+          GITHUB_CONTEXT: ${{ toJson(github.event.client_payload.github.issue) }}
+        run: echo "$GITHUB_CONTEXT"
+      - env:
+          GITHUB_CONTEXT: ${{ toJson(github.event.client_payload.github.issue.pull_request) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Get the target branch name
         id: vars
         run: |
