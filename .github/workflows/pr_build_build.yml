@@ -14,7 +14,7 @@ jobs:
       - name: Get the target branch name
         id: vars
         run: |
-          branch=$(curl -v -H "Accept: application/vnd.github.sailor-v-preview+json" -u ${{ secrets.REPO_ACCESS_TOKEN }} ${{ github.event.issue.pull_request.url }} | jq '.head.ref' | sed 's/\"//g')
+          branch=$(curl -v -H "Accept: application/vnd.github.sailor-v-preview+json" -u ${{ secrets.REPO_ACCESS_TOKEN }} ${{ github.event.client_payload.github.issue.pull_request.url }} | jq '.head.ref' | sed 's/\"//g')
           if [[ -z "$branch" ]]; then branch=${GITHUB_REF}; fi
           echo ::set-output name=branch::$branch
       - name: echo upstream branch
