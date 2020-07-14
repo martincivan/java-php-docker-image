@@ -1,0 +1,37 @@
+name: Slash Command Dispatch
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  slashCommandDispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: get pullrequest url
+        run: |
+          echo ${{ github.event.issue.pull_request.url }}
+      - name: get upstream branch
+        id: upstreambranch
+        run: |
+          echo "::set-output name=branchname::$(curl -v -H "Accept: application/vnd.github.sailor-v-preview+json" -u ${{ secrets.PAT }} ${{ github.event.issue.pull_request.url }} | jq '.head.ref' | sed 's/\"//g')"
+      - name: echo upstream branch
+        run: |
+          echo ${{ steps.upstreambranch.outputs.branchname }}
+      - name: echo github ref
+        run: |
+          echo ${{ GITHUB_REF }}
+#      - name: Checkout upstream repo
+#        uses: actions/checkout@v2
+#        with:
+#          ref: ${{ steps.upstreambranch.outputs.branchname }}
+      - name: Slash Command Dispatch
+        uses: peter-evans/slash-command-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          commands: deploy
+          issue-type: pull-request
+          issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
+          branch: ${{ GITHUB_REF }}

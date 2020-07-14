@@ -1,0 +1,21 @@
+name: Build release & deploy
+
+on:
+  repository_dispatch:
+    types: [deploy-command]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    outputs:
+        version: ${{ steps.set_version.outputs.version }}
+        deployment_id: ${{ steps.create_deployment.outputs.deployment_id }}
+    steps:
+      - name: Get the target branch name
+        id: vars
+        run: |
+          branch=${{ github.event.client_payload.slash_command.branch }}
+          if [[ -z "$branch" ]]; then branch=${GITHUB_REF}; fi
+          echo ::set-output name=branch::$branch
+      - name: echo upstream branch
+        run: |
+          echo ${{ steps.vars.outputs.branch }}
