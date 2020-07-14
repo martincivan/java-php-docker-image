@@ -10,6 +10,10 @@ jobs:
         version: ${{ steps.set_version.outputs.version }}
         deployment_id: ${{ steps.create_deployment.outputs.deployment_id }}
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Get the target branch name
         id: vars
         run: |
